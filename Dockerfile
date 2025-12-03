@@ -18,14 +18,14 @@ RUN useradd -m goblin -s /bin/bash
 WORKDIR /app
 
 # Copy requirements first for better caching
-COPY backend/requirements.txt .
+COPY requirements.txt .
 
 # Install Python dependencies
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
-COPY backend/ .
+COPY . .
 
 # Change ownership to non-root user
 RUN chown -R goblin:goblin /app
