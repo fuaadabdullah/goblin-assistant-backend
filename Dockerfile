@@ -33,12 +33,13 @@ RUN chown -R goblin:goblin /app
 # Switch to non-root user
 USER goblin
 
-# Expose port
+# Expose port (Render will set PORT env var)
 EXPOSE 8001
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:8001/health || exit 1
+    CMD curl -f http://localhost:${PORT:-8001}/health || exit 1
 
-# Start the application
-CMD ["python", "start_server.py"]
+# Start the application using uvicorn directly
+# Render sets PORT env var automatically
+CMD uvicorn main:app --host 0.0.0.0 --port ${PORT:-8001}
